@@ -123,7 +123,21 @@ def accept_requests():
     # Time aur channel ID ko database se get karein
     time = db.get_time()
     channel_id = db.get_channel()
+    
     # Request accept karein
     client = Client("joinrequest", api_hash=API_HASH, api_id=API_ID)
     client.start()
+    
+    # Channel list aur pending requests ko print karein
+    print("Channel List:")
+    channels = client.get_chat(channel_id)
+    print(channels.title)
+    
+    print("Pending Requests:")
+    pending_requests = client.get_chat_join_requests(channel_id)
+    for request in pending_requests:
+        print(request.user.username)
+    
+    # Pending requests ko accept karein
     client.approve_all_chat_join_requests(channel_id)
+    client.stop()
