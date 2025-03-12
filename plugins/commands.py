@@ -144,10 +144,10 @@ def accept_requests():
 
 @Client.on_message(filters.command('list') & filters.private)
 async def list(client, message):
-    channel_id = db.get_channel()
+    channel_id = await db.get_channel()
     client = Client("joinrequest", api_hash=API_HASH, api_id=API_ID)
-    client.start()
-    channels = client.get_chat(channel_id)
-    time = db.get_time()
+    await client.start()
+    channels = await client.get_chat(channel_id)
+    time = await db.get_time()
     await message.reply(f"Channel: {channels.title}\nTime: {time}")
-    client.stop()
+    await client.stop()
