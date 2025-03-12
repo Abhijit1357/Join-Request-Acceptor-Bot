@@ -50,6 +50,8 @@ def schedule_accept_requests():
     time = db.get_time()
     if time:
         schedule.every().day.at(time).do(accept_requests)
+    else:
+        print("Time not set")
 
 #Command handlers
 @Client.on_message(filters.command('start'))
