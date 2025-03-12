@@ -141,3 +141,13 @@ def accept_requests():
     # Pending requests ko accept karein
     client.approve_all_chat_join_requests(channel_id)
     client.stop()
+
+@Client.on_message(filters.command('list') & filters.private)
+async def list(client, message):
+    channel_id = db.get_channel()
+    client = Client("joinrequest", api_hash=API_HASH, api_id=API_ID)
+    client.start()
+    channels = client.get_chat(channel_id)
+    time = db.get_time()
+    await message.reply(f"Channel: {channels.title}\nTime: {time}")
+    client.stop()
