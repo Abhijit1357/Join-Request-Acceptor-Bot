@@ -79,18 +79,24 @@ async def accept(client, message):
 
 @Client.on_message(filters.command('set_time'))
 async def set_time(client, message):
-    time = message.command[1]
-    # Time ko database mein save karein
-    db.set_time(time)
-    client.send_message(chat_id=message.chat.id, text="Time set successfully!")
+    if len(message.command) >= 2:
+        time = message.command[1]
+        # Time ko database mein save karein
+        db.set_time(time)
+        client.send_message(chat_id=message.chat.id, text="Time set successfully!")
+    else:
+        client.send_message(chat_id=message.chat.id, text="Invalid command. Please provide a time.")
 
 @Client.on_message(filters.command('set_channel'))
 async def set_channel(client, message):
-    channel_id = message.command[1]
-    # Channel ID ko database mein save karein
-    db.set_channel(channel_id)
-    client.send_message(chat_id=message.chat.id, text="Channel set successfully!")
-
+    if len(message.command) >= 2:
+        channel_id = message.command[1]
+        # Channel ID ko database mein save karein
+        db.set_channel(channel_id)
+        client.send_message(chat_id=message.chat.id, text="Channel set successfully!")
+    else:
+        client.send_message(chat_id=message.chat.id, text="Invalid command. Please provide a channel ID.")
+        
 def schedule_accept_requests():
     schedule.every().day.at(db.get_time()).do(accept_requests)
 
