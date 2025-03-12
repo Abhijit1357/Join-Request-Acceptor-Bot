@@ -1,6 +1,6 @@
 import asyncio
 from pyrogram import Client, filters, enums
-from config import LOG_CHANNEL, API_ID, API_HASH, NEW_REQ_MODE
+from config import LOG_CHANNEL, LOG_TEXT, API_ID, API_HASH, NEW_REQ_MODE
 from plugins.database import db
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 import schedule
