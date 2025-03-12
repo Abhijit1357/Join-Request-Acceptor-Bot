@@ -47,4 +47,11 @@ class Database:
         settings = await self.settings.find_one({})
         return settings['time']
 
+    async def set_channel(self, channel_id):
+        await self.settings.update_one({}, {'$set': {'channel_id': channel_id}}, upsert=True)
+
+    async def get_channel(self):
+        settings = await self.settings.find_one({})
+        return settings['channel_id']
+
 db = Database(DB_URI, DB_NAME)
