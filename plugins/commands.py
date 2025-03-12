@@ -102,7 +102,7 @@ async def set_time(client, message):
         time = message.command[1]
         # Time ko database mein save karein
         db.set_time(time)
-        client.send_message(chat_id=message.chat.id, text="Time set successfully!")
+        await client.send_message(chat_id=message.chat.id, text="Time set successfully! Now set the channel ID using /set_channel command.")
     else:
         await client.send_message(chat_id=message.chat.id, text="Invalid command. Please provide a time.")
 
