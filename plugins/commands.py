@@ -8,17 +8,27 @@ import time
 
 #Time set karne ke liye function
 def set_time(client, message):
-    time = message.command[1]
-    # Time ko database mein save karein
-    db.set_time(time)
-    client.send_message(chat_id=message.chat.id, text="Time set successfully!")
+    if len(message.command) >= 2:
+        time = message.command[1]
+        # Time ko database mein save karein
+        db.set_time(time)
+        if message.chat.id:
+            client.send_message(chat_id=message.chat.id, text="Time set successfully!")
+    else:
+        if message.chat.id:
+            client.send_message(chat_id=message.chat.id, text="Invalid command. Please provide a time.")
 
 #Channel set karne ke liye function
 def set_channel(client, message):
-    channel_id = message.command[1]
-    # Channel ID ko database mein save karein
-    db.set_channel(channel_id)
-    client.send_message(chat_id=message.chat.id, text="Channel set successfully!")
+    if len(message.command) >= 2:
+        channel_id = message.command[1]
+        # Channel ID ko database mein save karein
+        db.set_channel(channel_id)
+        if message.chat.id:
+            client.send_message(chat_id=message.chat.id, text="Channel set successfully!")
+    else:
+        if message.chat.id:
+            client.send_message(chat_id=message.chat.id, text="Invalid command. Please provide a channel ID.")
 
 #Request accept karne ke liye function
 def accept_requests():
@@ -28,11 +38,18 @@ def accept_requests():
     # Request accept karein
     client = Client("joinrequest", api_hash=API_HASH, api_id=API_ID)
     client.start()
-    client.approve_all_chat_join_requests(channel_id)
+    try:
+        client.approve_all_chat_join_requests(channel_id)
+    except Exception as e:
+        print(f"Error: {str(e)}")
+    finally:
+        client.stop()
 
 #Schedule ko set karein
 def schedule_accept_requests():
-    schedule.every().day.at(db.get_time()).do(accept_requests)
+    time = db.get_time()
+    if time:
+        schedule.every().day.at(time).do(accept_requests)
 
 #Command handlers
 @Client.on_message(filters.command('start'))
