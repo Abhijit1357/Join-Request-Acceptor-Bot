@@ -114,7 +114,7 @@ async def set_channel(client, message):
         db.set_channel(channel_id)
         client.send_message(chat_id=message.chat.id, text="Channel set successfully!")
     else:
-        client.send_message(chat_id=message.chat.id, text="Invalid command. Please provide a channel ID.")
+        await client.send_message(chat_id=message.chat.id, text="Invalid command. Please provide a channel ID.")
         
 def schedule_accept_requests():
     schedule.every().day.at(db.get_time()).do(accept_requests)
