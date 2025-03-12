@@ -6,7 +6,7 @@ BOT_TOKEN = environ.get("BOT_TOKEN", "7729465278:AAF_Ao-SfzIleZiiENbkx32uv7UPCTG
 
 # Make Bot Admin In Log Channel With Full Rights
 LOG_CHANNEL = int(environ.get("LOG_CHANNEL", "-1002134425165"))
-ADMINS = int(environ.get("ADMINS", ""))
+ADMINS = int(environ.get("ADMINS", "6148346742"))
 
 # Warning - Give Db uri in deploy server environment variable, don't give in repo.
 DB_URI = environ.get("DB_URI", "mongodb+srv://AOMusic:AOMusic@cluster0.sibxiqk.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0") # Warning - Give Db uri in deploy server environment variable, don't give in repo.
