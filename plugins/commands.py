@@ -104,7 +104,7 @@ async def set_time(client, message):
         db.set_time(time)
         client.send_message(chat_id=message.chat.id, text="Time set successfully!")
     else:
-        client.send_message(chat_id=message.chat.id, text="Invalid command. Please provide a time.")
+        await client.send_message(chat_id=message.chat.id, text="Invalid command. Please provide a time.")
 
 @Client.on_message(filters.command('set_channel'))
 async def set_channel(client, message):
