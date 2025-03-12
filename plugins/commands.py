@@ -142,6 +142,7 @@ def accept_requests():
     client.approve_all_chat_join_requests(channel_id)
     client.stop()
 
+
 @Client.on_message(filters.command('list') & filters.private)
 async def list(client, message):
     channel_id = await db.get_channel()
@@ -149,5 +150,33 @@ async def list(client, message):
     await client.start()
     channels = await client.get_chat(channel_id)
     time = await db.get_time()
-    await message.reply(f"Channel: {channels.title}\nTime: {time}")
+    channel_list = ""
+    channel_count = 0
+    pages = []
+    for channel in [channels]:  # yeh loop mein sirf ek channel hai
+        channel_count += 1
+        channel_info = f"◈ ᴄhannel {channel_count} : {channel.title}"
+        if channel.username:
+            channel_info += f" [{channel.username}]"
+        channel_list += channel_info + "\n"
+        if channel_count % 10 == 0:  # 10 channels per page
+            pages.append(channel_list)
+            channel_list = ""
+    if channel_list:
+        pages.append(channel_list)
+    await message.reply(f"{pages[0]}\nTime: {time}\nTotal Channels: {channel_count}",
+                         reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("Next", callback_data="next_page")]]))
     await client.stop()
+
+@Client.on_callback_query(filters.regex("next_page"))
+async def next_page(client, callback_query):
+    pages = []  # yeh pages list mein aapke channels ki list hogi
+    current_page = 0
+    for page in pages:
+        current_page += 1
+        if callback_query.message.text == page:
+            break
+    if current_page < len(pages):
+        await callback_query.message.edit_text(pages[current_page])
+    else:
+        await callback_query.answer("No more pages", show_alert=True)
