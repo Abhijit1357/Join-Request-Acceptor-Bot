@@ -75,4 +75,30 @@ async def accept(client, message):
                     break
             await msg.edit("**Successfully accepted all join requests.**")
         except Exception as e:
-            await msg.edit(f"**An error occurred:**
+            await msg.edit(f"**An error occurred:** {str(e)}")
+
+@Client.on_message(filters.command('set_time'))
+async def set_time(client, message):
+    time = message.command[1]
+    # Time ko database mein save karein
+    db.set_time(time)
+    client.send_message(chat_id=message.chat.id, text="Time set successfully!")
+
+@Client.on_message(filters.command('set_channel'))
+async def set_channel(client, message):
+    channel_id = message.command[1]
+    # Channel ID ko database mein save karein
+    db.set_channel(channel_id)
+    client.send_message(chat_id=message.chat.id, text="Channel set successfully!")
+
+def schedule_accept_requests():
+    schedule.every().day.at(db.get_time()).do(accept_requests)
+
+def accept_requests():
+    # Time aur channel ID ko database se get karein
+    time = db.get_time()
+    channel_id = db.get_channel()
+    # Request accept karein
+    client = Client("joinrequest", api_hash=API_HASH, api_id=API_ID)
+    client.start()
+    client.approve_all_chat_join_requests(channel_id)
