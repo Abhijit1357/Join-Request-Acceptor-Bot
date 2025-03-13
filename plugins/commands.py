@@ -12,11 +12,9 @@ def set_time(client, message):
         time = message.command[1]
         # Time ko database mein save karein
         db.set_time(time)
-        if message.chat.id:
-            client.send_message(chat_id=message.chat.id, text="Time set successfully!")
+        client.send_message(chat_id=message.chat.id, text="Time set successfully!")
     else:
-        if message.chat.id:
-            client.send_message(chat_id=message.chat.id, text="Invalid command. Please provide a time.")
+        client.send_message(chat_id=message.chat.id, text="Invalid command. Please provide a time.")
 
 #Channel set karne ke liye function
 def set_channel(client, message):
