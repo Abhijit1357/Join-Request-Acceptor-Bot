@@ -47,8 +47,8 @@ async def accept_requests():
         await client.stop()
 
 #Schedule ko set karein
-def schedule_accept_requests():
-    time = db.get_time()
+async def schedule_accept_requests():
+    time = await db.get_time()
     if time:
         schedule.every().day.at(time).do(accept_requests)
     else:
