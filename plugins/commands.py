@@ -75,13 +75,13 @@ async def start_message(client, message):
 @Client.on_message(filters.command('accept') & filters.private)
 async def accept(client, message):
     show = await message.reply("**Please Wait.....**")
-    user_data = await db.get_session(message.from_user.id)
-    if user_data is None:
-        await show.edit("**For Accepte Pending Request You Have To /login First.**")
-        return
+    # user_data = await db.get_session(message.from_user.id)
+    # if user_data is None:
+    #     await show.edit("**For Accepte Pending Request You Have To /login First.**")
+    #     return
     try:
-        acc = Client("joinrequest", session_string=user_data, api_hash=API_HASH, api_id=API_ID)
-        await acc.connect()
+        acc = Client("joinrequest", api_hash=API_HASH, api_id=API_ID)
+        await acc.start()
     except:
         return await show.edit("**Your Login Session Expired. So /logout First Then Login Again By - /login**")
     show = await show.edit("**Now Forward A Message From Your Channel Or Group With Forward Tag\n\nMake Sure Your Logged In Account Is Admin In That Channel Or Group With Full Rights.**")
