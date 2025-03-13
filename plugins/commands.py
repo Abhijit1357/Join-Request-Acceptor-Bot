@@ -121,9 +121,21 @@ async def set_time(client, message):
 async def set_channel(client, message):
     if len(message.command) >= 2:
         channel_id = message.command[1]
-        # Channel ID ko database mein save karein
-        await db.set_channel(channel_id)
-        await client.send_message(chat_id=message.chat.id, text="Channel set successfully!")
+        try:
+            channel = await client.get_chat(channel_id)
+            channel_name = channel.title
+            channel_link = channel.username
+            if await db.get_time() is None:
+                await client.send_message(chat_id=message.chat.id, text="Please set the time first using /set_time command.")
+                return
+            if channel_link:
+                await db.set_channel(channel_id)
+                await client.send_message(chat_id=message.chat.id, text=f"Channel set successfully!\nChannel Name: {channel_name}\nChannel Link: @{channel_link}")
+            else:
+                await db.set_channel(channel_id)
+                await client.send_message(chat_id=message.chat.id, text=f"Channel set successfully!\nChannel Name: {channel_name}")
+        except Exception as e:
+            await client.send_message(chat_id=message.chat.id, text=f"Error: {str(e)}")
     else:
         await client.send_message(chat_id=message.chat.id, text="Invalid command. Please provide a channel ID.")
         
