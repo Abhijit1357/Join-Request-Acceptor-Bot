@@ -139,31 +139,30 @@ async def set_channel(client, message):
     else:
         await client.send_message(chat_id=message.chat.id, text="Invalid command. Please provide a channel ID.")
         
-def schedule_accept_requests():
-    schedule.every().day.at(db.get_time()).do(accept_requests)
+async def schedule_accept_requests():
+    schedule.every().day.at(await db.get_time()).do(accept_requests)
 
-def accept_requests():
+async def accept_requests():
     # Time aur channel ID ko database se get karein
-    time = db.get_time()
-    channel_id = db.get_channel()
-    
+    time = await db.get_time()
+    channel_id = await db.get_channel()
+
     # Request accept karein
     client = Client("joinrequest", api_hash=API_HASH, api_id=API_ID)
-    client.start()
-    
+    await client.start()
+
     # Channel list aur pending requests ko print karein
     print("Channel List:")
-    channels = client.get_chat(channel_id)
+    channels = await client.get_chat(channel_id)
     print(channels.title)
-    
     print("Pending Requests:")
-    pending_requests = client.get_chat_join_requests(channel_id)
+    pending_requests = await client.get_chat_join_requests(channel_id)
     for request in pending_requests:
         print(request.user.username)
-    
+
     # Pending requests ko accept karein
-    client.approve_all_chat_join_requests(channel_id)
-    client.stop()
+    await client.approve_all_chat_join_requests(channel_id)
+    await client.stop()
     
 @Client.on_message(filters.command('list') & filters.private)
 async def list(client, message):
