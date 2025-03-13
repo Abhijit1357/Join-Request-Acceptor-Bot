@@ -31,19 +31,20 @@ def set_channel(client, message):
             client.send_message(chat_id=message.chat.id, text="Invalid command. Please provide a channel ID.")
 
 #Request accept karne ke liye function
-def accept_requests():
+async def accept_requests():
     # Time aur channel ID ko database se get karein
-    time = db.get_time()
-    channel_id = db.get_channel()
+    time = await db.get_time()
+    channel_id = await db.get_channel()
+
     # Request accept karein
     client = Client("joinrequest", api_hash=API_HASH, api_id=API_ID)
-    client.start()
+    await client.start()
     try:
-        client.approve_all_chat_join_requests(channel_id)
+        await client.approve_all_chat_join_requests(channel_id)
     except Exception as e:
         print(f"Error: {str(e)}")
     finally:
-        client.stop()
+        await client.stop()
 
 #Schedule ko set karein
 def schedule_accept_requests():
